@@ -22,12 +22,9 @@ public class CategoryService {
         return repository.save(category);
     }
 
-    public Category findCategoryById(Long id) {
-        Optional<Category> optCategory = repository.findById(id);
-        if (optCategory.isPresent()) {
-            return optCategory.get();
-        }
-        return null;
+    public Optional<Category> findCategoryById(Long id) {
+        return repository.findById(id);
+
     }
 
     public void deleteById(Long id) {

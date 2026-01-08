@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/movieflix/category")
@@ -33,8 +34,12 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id) {
-        return categoryService.findCategoryById(id);
+    public CategoryResponse getCategoryById(@PathVariable Long id) {
+        Optional<Category> optCategory = categoryService.findCategoryById(id);
+        if (optCategory.isPresent()) {
+            return CategoryMapper.toCategoryResponse(optCategory.get());
+        }
+        return null;
     }
 
     @DeleteMapping("/{id}")
