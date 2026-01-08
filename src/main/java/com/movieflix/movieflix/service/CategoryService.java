@@ -30,4 +30,8 @@ public class CategoryService {
         return null;
     }
 
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
 }
