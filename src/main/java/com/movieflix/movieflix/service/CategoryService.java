@@ -23,8 +23,11 @@ public class CategoryService {
     }
 
     public Category findCategoryById(Long id) {
-        Optional<Category> category = repository.findById(id);
-        return category.orElse(null);
+        Optional<Category> optCategory = repository.findById(id);
+        if (optCategory.isPresent()) {
+            return optCategory.get();
+        }
+        return null;
     }
 
 }
