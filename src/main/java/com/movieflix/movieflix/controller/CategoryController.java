@@ -6,6 +6,8 @@ import com.movieflix.movieflix.request.CategoryRequest;
 import com.movieflix.movieflix.response.CategoryResponse;
 import com.movieflix.movieflix.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,32 +21,41 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping()
-    public List<CategoryResponse> getAllCategories() {
-        List<Category> categories = categoryService.findAll();
-        return categories.stream()
+    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+        return ResponseEntity.ok(categoryService.findAll()
+                .stream()
+                .map(CategoryMapper::toCategoryResponse)
+                .toList());
+        /*List<Category> categories = categoryService.findAll();
+        List<CategoryResponse> list = categories.stream()
                 .map(CategoryMapper::toCategoryResponse)
                 .toList();
+        return ResponseEntity.ok(list);*/
     }
 
     @PostMapping("/a")
-    public CategoryResponse saveCategory(@RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryResponse> saveCategory(@RequestBody CategoryRequest request) {
         Category newCategory = CategoryMapper.toCategory(request);
         Category savedCategory = categoryService.saveCategory(newCategory);
-        return CategoryMapper.toCategoryResponse(savedCategory);
+        CategoryResponse category = CategoryMapper.toCategoryResponse(savedCategory);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
     @GetMapping("/{id}")
-    public CategoryResponse getCategoryById(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
         Optional<Category> optCategory = categoryService.findCategoryById(id);
         if (optCategory.isPresent()) {
-            return CategoryMapper.toCategoryResponse(optCategory.get());
+            CategoryResponse category = CategoryMapper.toCategoryResponse(optCategory.get());
+            return ResponseEntity.ok().body(category);
         }
-        return null;
+        return ResponseEntity.notFound().build();
+        // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategoryById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCategoryById(@PathVariable Long id) { // Esse Void precisa ter "V" em Uppercase
         categoryService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
