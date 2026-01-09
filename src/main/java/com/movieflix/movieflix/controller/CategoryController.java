@@ -33,17 +33,17 @@ public class CategoryController {
         return ResponseEntity.ok(list);*/
     }
 
-    @PostMapping("/a")
+    @PostMapping
     public ResponseEntity<CategoryResponse> saveCategory(@RequestBody CategoryRequest request) {
         Category newCategory = CategoryMapper.toCategory(request);
-        Category savedCategory = categoryService.saveCategory(newCategory);
+        Category savedCategory = categoryService.save(newCategory);
         CategoryResponse category = CategoryMapper.toCategoryResponse(savedCategory);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
-        Optional<Category> optCategory = categoryService.findCategoryById(id);
+        Optional<Category> optCategory = categoryService.findById(id);
         if (optCategory.isPresent()) {
             CategoryResponse category = CategoryMapper.toCategoryResponse(optCategory.get());
             return ResponseEntity.ok().body(category);

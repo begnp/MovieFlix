@@ -1,7 +1,7 @@
 package com.movieflix.movieflix.service;
 
-import com.movieflix.movieflix.entity.Category;
-import com.movieflix.movieflix.repository.CategoryRepository;
+import com.movieflix.movieflix.entity.Streaming;
+import com.movieflix.movieflix.repository.StreamingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,19 +10,19 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class StreamingService {
 
-    private final CategoryRepository repository;
+    private final StreamingRepository repository;
 
-    public List<Category> findAll() {
+    public List<Streaming> findAll() {
         return repository.findAll();
     }
 
-    public Category save(Category category) {
-        return repository.save(category);
+    public Streaming save(Streaming streaming) {
+        return repository.save(streaming);
     }
 
-    public Optional<Category> findById(Long id) {
+    public Optional<Streaming> findById(Long id) {
         return repository.findById(id);
 
     }
