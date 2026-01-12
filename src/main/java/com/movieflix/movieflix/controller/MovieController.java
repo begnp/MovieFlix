@@ -7,6 +7,7 @@ import com.movieflix.movieflix.response.MovieResponse;
 import com.movieflix.movieflix.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,13 @@ public class MovieController {
             return ResponseEntity.ok(movieResponse);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieResponse> updateMovieById(@PathVariable Long id, @RequestBody MovieRequest movieRequest) {
+        return movieService.update(id, MovieMapper.toMovie(movieRequest))
+                .map(movie -> ResponseEntity.ok(MovieMapper.toMovieResponse(movie)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
