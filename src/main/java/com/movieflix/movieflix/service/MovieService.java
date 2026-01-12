@@ -33,6 +33,10 @@ public class MovieService {
         return movieRepository.findById(id);
     }
 
+    public List<Movie> findByCategory(Long categoryId) {
+        return movieRepository.findMovieByCategories(List.of(Category.builder().id(categoryId).build()));
+    }
+
     public Optional<Movie> update(Long id, Movie updateMovie) {
         Optional<Movie> optMovie = movieRepository.findById(id);
         if (optMovie.isPresent()) {
